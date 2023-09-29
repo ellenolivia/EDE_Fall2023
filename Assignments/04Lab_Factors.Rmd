@@ -29,16 +29,21 @@ sites$date <- ymd_hms(sites$date)
 
 #Compute the day of the week each sample was collected
 sites$dow <- wday(sites$date)
+#this is new colum 
+#wday is a lubridate function that looks at day of year and returns day of the week
+
 
 ## What class is the dow column?
 class(sites$dow)
+
 
 #List the unique values in the column
 unique(sites$dow)
 
 #Summary - is it meaningful?
 summary(sites$dow)
-
+#not all numbers have numeric meaning (are ordinal, though)
+#cannot take mean of this
 ```
 
 ## Convert the days of the week to a factor
@@ -46,18 +51,23 @@ summary(sites$dow)
 
 #Convert to a factor
 sites$dow <- factor(sites$dow)
+#convert column from numeric factor to column
 
 ## What class is the dow column now?
 class(sites$dow)
 
 #List the unique values in the column
 unique(sites$dow)
+#shows unique values
 
 #Summary - is it meaningful?
 summary(sites$dow)
 
 #Show the levels associated with our factor column
 levels(sites$dow)
+#set of unique values in dataset
+#every row in dataset has a relationship - all of these collected on same day, for example (factor is a grouping variable)
+#when would a string not be grouping variable - a dna sequence where letters mean something, would be an example
 ```
 
 ## Factors & Levels
@@ -76,6 +86,7 @@ ggplot(sites,aes(x=dow)) +
 ```{r add levels to our data}
 #Update the levels to include all seven days of the week (note we have to start with existing levels)
 levels(sites$dow) <- c(levels(sites$dow),"1","2","6","7")
+#taking existing levels, and adding additional ones and completing the set
 
 #Confirm the change
 levels(sites$dow)
@@ -84,7 +95,8 @@ levels(sites$dow)
 ggplot(sites,aes(x=dow)) +
   geom_bar() + 
   scale_x_discrete(drop=FALSE)
-
+#count of records in each of these levels
+#plots it again using just standard bar plot statement. But next is visualization. - use scales, which override defaults. If you have levels that have no members, dont drop them
 ```
 
 We now have all days of the week, but the order is incorrect. Also, we have day numbers, not day names. How to fix?
@@ -92,6 +104,11 @@ We now have all days of the week, but the order is incorrect. Also, we have day 
 
 #Reorder by overwriting the column with the existing values assigned with a new order of levels
 sites$dow <- factor(sites$dow, levels=c("1","2","3","4","5","6","7")) #Or... as.character(seq(1,7))
+#as.character(seq(1,7))
+#updates column,
+#control categories, not just the ones that have members
+#using numbers currenttly as days of the week
+#factors also have labels
 
 #See that the levels are updated
 levels(sites$dow)
@@ -106,7 +123,7 @@ sites$dow <- factor(
   sites$dow, 
   levels=c("1","2","3","4","5","6","7"),
   labels=c("Sun","Mon","Tue","Wed","Thu","Fri","Sat"))
-
+#here are the levels, and here are the labels
 #See that the levels are updated
 levels(sites$dow)
 

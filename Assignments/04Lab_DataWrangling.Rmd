@@ -41,9 +41,17 @@ str(NTL.phys.data$sampledate)
 
 #Alternatively, use the tidyverse/dplyr "glimpse" function
 glimpse(NTL.phys.data$sampledate)
+#tidyverse??
 
 # Change sampledate values into date objects
 NTL.phys.data$sampledate <- mdy(NTL.phys.data$sampledate)
+
+#DPLYR
+#which would we use to subset rows based on criteria: filter
+#sort rows based on values in one or more columns: arrange
+#subset or reearragne columns: select
+#calcualate a column based on existing ones: mutate
+#perform multiple options on data frame: 
 ```
 
 ---
@@ -54,20 +62,33 @@ Filtering allows us to choose certain rows (observations) in our dataset.
 
 ```{r filter data}
 # note the data types of these two columns
+#lakeid is a factor and depth is numeric - what we are filtering
 class(NTL.phys.data$lakeid)
 class(NTL.phys.data$depth)
 
 # dplyr filtering
-NTL.phys.data.surface <- filter(NTL.phys.data, depth == 0)
+NTL.phys.data.surface <- filter(NTL.phys.data, depth == 0) #grab everything where depth is zero
 
 # Choose multiple conditions to filter
+#reports all unique values in query string - need to get values exactly.
+#use summary command
+#can also use unique and levels
 summary(NTL.phys.data$lakename)
 NTL.phys.data.PeterPaul <- 
   filter(NTL.phys.data, lakename %in% c("Paul Lake", "Peter Lake"))
+#in statement/operator and now providing slice
+#this command is put in two lines
+#load tidyverse packages - dplyer there is also base r package called plyer. DOn't do dplyer than plyer...
+#if error restat R to get rid of plyer
+#could be compound filter query statement (and or)
 
 # Choose a range of conditions of a numeric or integer variable
 summary(NTL.phys.data$daynum)
-NTL.phys.data.JunethruOctober <- filter(NTL.phys.data, daynum %in% c(152:304))
+NTL.phys.data.JunethruOctober <- filter(NTL.phys.data, daynum %in% c(152:304)) #day numbers.. dec 31 = 365
+#grab days june through october. If you look at dataset, find june first
+#can provide little slices of days to get records
+#%in% ?
+
 ```
 
 ```{r Exercise 1 & 2}
@@ -75,10 +96,16 @@ NTL.phys.data.JunethruOctober <- filter(NTL.phys.data, daynum %in% c(152:304))
 # filter NTL.phys.data for the year 1999
 # what code do you need to use, based on the class of the variable?
 
+summary(NTL.phys.data, year4==1999)
+wz2<- filter(
+  NTL.phys.data,
+  year4%in% c(19990:1999)&lakename == "Tuesday Lake" #goes up to and it does include last value
+)
+# %in% is an operator means "within range of values or inside a collection of values"
 
 # Exercise 2: 
 # filter NTL.phys.data for Tuesday Lake from 1990 through 1999.
-
+filter(NTL.phys.data$daynum2())
 
 ```
 Question: Why don't we filter using row numbers?
@@ -97,17 +124,25 @@ Let's say we want to take our raw dataset (NTL.phys.data), *then* filter the dat
 #Example using pipes to wrangle data
 NTL.phys.data.processed <- 
   NTL.phys.data %>%
-  filter(lakename == "Paul Lake" | lakename == "Peter Lake") %>%
+  filter(lakename == "Paul Lake" | lakename == "Peter Lake") %>% #piping into filter commands
   select(lakename, sampledate:temperature_C) %>%
   mutate(temperature_F = (temperature_C*9/5) + 32)
+#useful in making code readable and ensuring code doesnt go off page when knitting
+
 
 #Exercise 3: Using a pipe filter NTL.phys.data for Tuesday Lake from 1990 
 # through 1999 only for July.
-
-
+filter_practice <-
+NTL.phys.data %>%
+wz2<- filter(lakename == "Tuesday Lake") %>%
+  year4%in% c(1990:1999)&lakename == "Tuesday Lake"
+  select()
 #Exercise 4: Using the data from part 3, a pipe, and the summarize() function 
 # find the mean surface temperature (hints: you will need to add another
 # filter for depth==0). Make sure you eliminate NAs before computing the means.
+#pivot longer or gathering data and make it longer
+#pivot wider - create table of temperature at different depths where appear as values in single comu,n create column for every new values in depth column 
+
 
   
 ```

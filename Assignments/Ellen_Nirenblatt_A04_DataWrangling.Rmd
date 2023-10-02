@@ -166,7 +166,7 @@ selectedsitenames <- combineddata %>% filter(Site.Name%in% c("Linville Falls", "
   summarize(
     Mean_AQI = mean(DAILY_AQI_VALUE),
     Mean_Latitude = mean(SITE_LATITUDE),
-    Mean_Longitude = mean(SITE_LONGITUDE)
+    Mean_Longitude = mean(SITE_LONGITUDE),
   )%>%
   mutate(month=month(Date))%>%
   mutate(year=year(Date))
